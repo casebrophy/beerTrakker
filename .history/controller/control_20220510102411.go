@@ -1,0 +1,24 @@
+package controller
+
+import (
+	"fmt"
+	"html/template"
+	"net/http"
+)
+
+type pageData struct {
+	Title string
+}
+
+func (s *Server) handleHomePage() http.HandlerFunc {
+
+	var tpl = template.Must(template.ParseGlob("./templates/**"))
+	//tpl = template.Must(template.ParseFiles("frontend/index.html"))
+	fmt.Println(tpl.Templates())
+	p := pageData{Title: "trakker"}
+	return func(w http.ResponseWriter, r *http.Request) {
+		if err := tpl.Execute(w, p); err != nil {
+			fmt.Println(err.Error())
+		}
+	}
+}
